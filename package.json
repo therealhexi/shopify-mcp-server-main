@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
+    "build": "tsc && node -e \"require('fs').chmodSync('dist/index.js', '755')\""
   },
   "keywords": [],
   "author": "Amir Bengherbi",
@@ -25,9 +25,9 @@
   },
   "type": "module",
   "files": [
-    "build"
+    "dist"
   ],
   "bin": {
-    "shopify-mcp-server": "./build/index.js"
+    "shopify-mcp-server": "./dist/index.js"
   }
 }

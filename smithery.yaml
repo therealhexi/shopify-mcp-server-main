@@ -1,0 +1,24 @@
+# Smithery configuration file: https://smithery.ai/docs/deployments
+
+build:
+  dockerBuildPath: ../../
+
+startCommand:
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - shopifyAccessToken
+      - shopifyDomain
+    properties:
+      shopifyAccessToken:
+        type: string
+        description: The personal access token for accessing the Shopify API.
+      shopifyDomain:
+        type: string
+        description: The domain of the Shopify store.
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'node', args: ['dist/index.js'], env: { SHOPIFY_ACCESS_TOKEN: config.shopifyAccessToken, MYSHOPIFY_DOMAIN: config.shopifyDomain } })
+  type: stdio

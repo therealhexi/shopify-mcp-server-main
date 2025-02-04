@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
       "target": "ES2022",
-      "module": "Node16",
-      "moduleResolution": "Node16",
-      "outDir": "./build",
+      "module": "Nodenext",
+      "moduleResolution": "Nodenext",
+      "outDir": "./dist",
       "rootDir": "./src",
       "strict": true,
       "esModuleInterop": true,
