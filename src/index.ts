@@ -15,7 +15,7 @@ import {
 
 const server = new McpServer({
   name: "shopify-tools",
-  version: "1.0.0",
+  version: "1.0.1",
 });
 
 const SHOPIFY_ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
@@ -33,6 +33,7 @@ if (!MYSHOPIFY_DOMAIN) {
 function formatProduct(product: ProductNode): string {
   return `
   Product: ${product.title} 
+  id: ${product.id}
   description: ${product.description} 
   handle: ${product.handle}
   variants: ${product.variants.edges
@@ -185,6 +186,33 @@ server.tool(
       };
     } catch (error) {
       return handleError("Failed to retrieve products by IDs", error);
+    }
+  }
+);
+
+server.tool(
+  "update-product-price",
+  "Update the price of a product by its ID for all variants",
+  {
+    productId: z.string()
+      .describe("ID of the product to update"),
+    price: z.string()
+    .describe("Price of the product to update to"),
+  },
+  async ({ productId, price }) => {
+    const client = new ShopifyClient();
+    try {
+      const response = await client.updateProductPrice(
+        SHOPIFY_ACCESS_TOKEN,
+        MYSHOPIFY_DOMAIN,
+        productId,
+        price
+      );
+      return {
+        content: [{ type: "text", text: JSON.stringify(response, null, 2) }],
+      };
+    } catch (error) {
+      return handleError("Failed to update product price", error);
     }
   }
 );

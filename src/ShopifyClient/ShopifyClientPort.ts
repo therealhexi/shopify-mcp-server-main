@@ -164,6 +164,21 @@ export type CreatePriceRuleResponse = {
   id: string;
 };
 
+export type UpdateProductPriceResponse ={
+  success: boolean;
+  errors?: Array<{field: string; message: string}>;
+  product?: {
+    id: string;
+    variants: {
+      edges: Array<{
+        node: {
+          price: string;
+        };
+      }>;
+    };
+  };
+}
+
 type DiscountCode = {
   code: string | null;
   amount: string | null;
@@ -1042,6 +1057,13 @@ export interface ShopifyClientPort {
     shop: string,
     productIds: string[]
   ): Promise<LoadProductsByIdsResponse>;
+
+  updateProductPrice(
+    accessToken: string,
+    shop: string,
+    productId: string,
+    price: string
+  ): Promise<UpdateProductPriceResponse>;
 
   loadVariantsByIds(
     accessToken: string,

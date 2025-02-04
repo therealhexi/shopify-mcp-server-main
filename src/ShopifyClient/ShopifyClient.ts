@@ -39,6 +39,7 @@ import {
   ShopifyWebhookTopic,
   ShopifyWebhookTopicGraphql,
   ShopifyClientPort,
+  UpdateProductPriceResponse,
   CustomError,
   Maybe,
   ShopifyOrdersGraphqlQueryParams,
@@ -1435,6 +1436,98 @@ export class ShopifyClient implements ShopifyClientPort {
     const currencyCode = data.shop.currencyCode;
 
     return { products, currencyCode };
+  }
+
+  async updateProductPrice(
+    accessToken: string,
+    shop: string,
+    productId: string,
+    price: string
+  ): Promise<UpdateProductPriceResponse> {
+    const myshopifyDomain = await this.getMyShopifyDomain(accessToken, shop);
+    
+    const graphqlQuery = gql`
+      mutation productUpdate($input: ProductInput!) {
+        productUpdate(input: $input) {
+          product {
+            id
+            priceRangeV2 {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            variants(first: 100) {
+              edges {
+                node {
+                  id
+                  price
+                }
+              }
+            }
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `;
+  
+    const variables = {
+      input: {
+        id: productId,
+        variants: {
+          price: price
+        }
+      }
+    };
+  
+    const res = await this.shopifyGraphqlRequest<{
+      data: {
+        productUpdate: {
+          product: {
+            id: string;
+            priceRangeV2: {
+              minVariantPrice: {amount: string; currencyCode: string};
+              maxVariantPrice: {amount: string; currencyCode: string};
+            };
+            variants: {
+              edges: Array<{
+                node: {
+                  id: string;
+                  price: string;
+                };
+              }>;
+            };
+          };
+          userErrors: Array<{field: string; message: string}>;
+        };
+      };
+    }>({
+      url: `https://${myshopifyDomain}/admin/api/${this.SHOPIFY_API_VERSION}/graphql.json`,
+      accessToken,
+      query: graphqlQuery,
+      variables
+    });
+  
+    const data = res.data.data;
+    
+    if (data.productUpdate.userErrors.length > 0) {
+      return {
+        success: false,
+        errors: data.productUpdate.userErrors
+      };
+    }
+  
+    return {
+      success: true,
+      product: data.productUpdate.product
+    };
   }
 
   async loadCustomers(

@@ -34,27 +34,34 @@ MCP Server for Shopify API, enabling interaction with store data through GraphQL
      * `productIds` (array of strings): Array of product IDs to retrieve
    * Returns: Formatted product details for the specified products
 
-4. `get-variants-by-ids`
+4. `update-product-price`
+   * Update product prices for its ID
+   * Inputs:
+     * `productId` (string): ID of the product to update
+     * `price` (string): New price for the product
+   * Returns: Response of the update
+
+5. `get-variants-by-ids`
    * Get product variants by their IDs
    * Inputs:
      * `variantIds` (array of strings): Array of variant IDs to retrieve
    * Returns: Detailed variant information including product details
 
-5. `get-customers`
+6. `get-customers`
    * Get shopify customers with pagination support
    * Inputs:
      * `limit` (optional number): Maximum number of customers to return
      * `next` (optional string): Next page cursor
    * Returns: Customer data in JSON format
 
-6. `tag-customer`
+7. `tag-customer`
    * Add tags to a customer
    * Inputs:
      * `customerId` (string): Customer ID to tag
      * `tags` (array of strings): Tags to add to the customer
    * Returns: Success or failure message
 
-7. `get-orders`
+8. `get-orders`
    * Get orders with advanced filtering and sorting
    * Inputs:
      * `first` (optional number): Limit of orders to return
@@ -64,13 +71,13 @@ MCP Server for Shopify API, enabling interaction with store data through GraphQL
      * `reverse` (optional boolean): Reverse sort order
    * Returns: Formatted order details
 
-8. `get-order`
+9. `get-order`
    * Get a single order by ID
    * Inputs:
      * `orderId` (string): ID of the order to retrieve
    * Returns: Detailed order information
 
-9. `create-discount`
+10. `create-discount`
    * Create a basic discount code
    * Inputs:
      * `title` (string): Title of the discount
@@ -82,7 +89,7 @@ MCP Server for Shopify API, enabling interaction with store data through GraphQL
      * `appliesOncePerCustomer` (boolean): Whether discount can be used only once per customer
    * Returns: Created discount details
 
-10. `create-draft-order`
+11. `create-draft-order`
     * Create a draft order
     * Inputs:
       * `lineItems` (array): Array of items with variantId and quantity
@@ -91,31 +98,31 @@ MCP Server for Shopify API, enabling interaction with store data through GraphQL
       * `note` (optional string): Optional note for the order
     * Returns: Created draft order details
 
-11. `complete-draft-order`
+12. `complete-draft-order`
     * Complete a draft order
     * Inputs:
       * `draftOrderId` (string): ID of the draft order to complete
       * `variantId` (string): ID of the variant in the draft order
     * Returns: Completed order details
 
-12. `get-collections`
+13. `get-collections`
     * Get all collections
     * Inputs:
       * `limit` (optional number, default: 10): Maximum number of collections to return
       * `name` (optional string): Filter collections by name
     * Returns: Collection details
 
-13. `get-shop`
+14. `get-shop`
     * Get shop details
     * Inputs: None
     * Returns: Basic shop information
 
-14. `get-shop-details`
+15. `get-shop-details`
     * Get extended shop details including shipping countries
     * Inputs: None
     * Returns: Extended shop information including shipping countries
 
-15. `manage-webhook`
+16. `manage-webhook`
     * Subscribe, find, or unsubscribe webhooks
     * Inputs:
       * `action` (enum): Action to perform ('subscribe', 'find', 'unsubscribe')
